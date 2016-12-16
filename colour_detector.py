@@ -104,10 +104,71 @@ def convert_rgb_to_xyz(rgb):
     print('RGB values of %s convert to XYZ values of %s' % (rgb, xyz))
     return xyz
 
+def convert_xyz_to_cielab(xyz):
+    """
+    Convert RGB values to XYZ values.
+
+    Math from http://www.easyrgb.com/index.php?X=MATH&H=07#text7
+    Pseudo code:
+
+    Observer= 2 degrees, Illuminant= D65
+    var_X = X / ref_X          //ref_X =  95.047
+    var_Y = Y / ref_Y          //ref_Y = 100.000
+    var_Z = Z / ref_Z          //ref_Z = 108.883
+
+    if ( var_X > 0.008856 ) var_X = var_X ^ ( 1/3 )
+    else                    var_X = ( 7.787 * var_X ) + ( 16 / 116 )
+    if ( var_Y > 0.008856 ) var_Y = var_Y ^ ( 1/3 )
+    else                    var_Y = ( 7.787 * var_Y ) + ( 16 / 116 )
+    if ( var_Z > 0.008856 ) var_Z = var_Z ^ ( 1/3 )
+    else                    var_Z = ( 7.787 * var_Z ) + ( 16 / 116 )
+
+    CIE-L* = ( 116 * var_Y ) - 16
+    CIE-a* = 500 * ( var_X - var_Y )
+    CIE-b* = 200 * ( var_Y - var_Z )
+    """
+
+    x = xyz['X']
+    y = xyz['Y']
+    z = xyz['Z']
+
+    ref_x = 95.047
+    ref_y = 100.000
+    ref_z = 108.83
+
+    x /= ref_x
+    y /= ref_y
+    z /= ref_z
+
+    if x > 0.08856:
+        x **= (1 / 3)
+    else:
+        x = (7.787 * x ) + (16 / 116)
+
+    if y > 0.08856:
+        y **= (1 / 3)
+    else:
+        y = (7.787 * y ) + (16 / 116)
+
+    if z > 0.08856:
+        z **= (1 / 3)
+    else:
+        z = (7.787 * z ) + (16 / 116)
+
+    l = (116 * y) - 16
+    a = 500 * (x - y)
+    b = 200 * (y - z)
+
+    lab = {'CIE-L*': l, 'CIE-a*': a,'CIE-b*': b}
+
+    print('XYZ values of %s convert to CIE-L*ab values of %s' % (xyz, lab))
+    return lab
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('image_file', help='The image you\'d like to get the colour for.')
     args = parser.parse_args()
     rgb_values = rgb(args.image_file)
-    convert_rgb_to_xyz(rgb_values)
+    xyz_values = convert_rgb_to_xyz(rgb_values)
+    lab_values = convert_xyz_to_cielab(xyz_values)
