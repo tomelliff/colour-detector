@@ -72,34 +72,34 @@ def convert_rgb_to_xyz(rgb):
     g = rgb['green']
     b = rgb['blue']
 
-    var_r = r / 255
-    var_g = g / 255
-    var_b = b / 255
+    r /= 255
+    g /= 255
+    b /= 255
 
-    if var_r > 0.04045:
-        var_r = ((var_r + 0.055) / 1.055) ** 2.4
+    if r > 0.04045:
+        r = ((r + 0.055) / 1.055) ** 2.4
     else:
-        var_r /= 12.92
+        r /= 12.92
 
-    if var_g > 0.04045:
-        var_g = ((var_g + 0.055) / 1.055) ** 2.4
+    if g > 0.04045:
+        g = ((g + 0.055) / 1.055) ** 2.4
     else:
-        var_g /= 12.92
+        g /= 12.92
 
-    if var_b > 0.04045:
-        var_b = ((var_b + 0.055) / 1.055) ** 2.4
+    if b > 0.04045:
+        b = ((b + 0.055) / 1.055) ** 2.4
     else:
-        var_b /= 12.92
+        b /= 12.92
 
-    var_r *= 100
-    var_g *= 100
-    var_b *= 100
+    r *= 100
+    g *= 100
+    b *= 100
 
-    X = var_r * 0.4124 + var_g * 0.3576 + var_b * 0.1805
-    Y = var_r * 0.2126 + var_g * 0.7152 + var_b * 0.0722
-    Z = var_r * 0.0193 + var_g * 0.1192 + var_b * 0.9505
+    x = r * 0.4124 + g * 0.3576 + b * 0.1805
+    y = r * 0.2126 + g * 0.7152 + b * 0.0722
+    z = r * 0.0193 + g * 0.1192 + b * 0.9505
 
-    xyz = {'X': X, 'Y': Y,'Z': Z}
+    xyz = {'X': x, 'Y': y,'Z': z}
 
     print('RGB values of %s convert to XYZ values of %s' % (rgb, xyz))
     return xyz
