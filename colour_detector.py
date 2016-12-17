@@ -106,7 +106,7 @@ def convert_rgb_to_xyz(rgb):
 
 def convert_xyz_to_cielab(xyz):
     """
-    Convert RGB values to XYZ values.
+    Convert XYZ values to CIE-L*ab values.
 
     Math from http://www.easyrgb.com/index.php?X=MATH&H=07#text7
     Pseudo code:
