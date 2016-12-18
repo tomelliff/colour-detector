@@ -3,14 +3,22 @@ import argparse
 
 import colour_detector
 
+def _format_rgb_values(rgb_values):
+    for rgb_value in rgb_values:
+        return ''.join([_zero_pad_number(v) for v in rgb_values])
+
+def _zero_pad_number(number, length=3):
+    return str(number).zfill(length)
+
 def store_rgbs_for_product(rgb, product_code):
     """
     Store the RGB values against the product code.
     For now this is just a flat CSV file.
     """
 
+    rgb_values = _format_rgb_values(rgb)
     with open('database.txt', 'a') as database:
-        database.write('%s, %s' % (rgb, product_code))
+        database.write('{},{}\n'.format(rgb_values, product_code))
 
 
 if __name__ == '__main__':
