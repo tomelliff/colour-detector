@@ -1,34 +1,68 @@
+import boto3
+
+from botocore.exceptions import ClientError
+
 class DataStorage(object):
     """
     Store RGB values against product code and retrieve product codes for
     given RGB values.
     """
+
+    def __init__(self):
+        self._dynamodb = boto3.resource('dynamodb', region_name='eu-west-1',
+                                        endpoint_url='http://localhost:8000')
+        self._table = self._dynamodb.Table('ProductColours')
+
     def _format_rgb_values(self, rgb_values):
+        """
+        Takes a tuple of RGB values and formats it into a string.
+        Example input: (86, 103, 1)
+        Example output: '086103001'
+        """
+
         for rgb_value in rgb_values:
             return ''.join([self._zero_pad_number(v) for v in rgb_values])
 
     def _zero_pad_number(self, number, length=3):
         return str(number).zfill(length)
 
-    def store_rgb_for_product(self, rgb, product_code):
-        """
-        Store the RGB values against the product code.
-        For now this is just a flat CSV file.
-        """
+    def store_product_for_rgb(self, rgb, product_code):
+        """Store the product code against the RGB values."""
 
         rgb_values = self._format_rgb_values(rgb)
-        with open('database.txt', 'a') as database:
-            database.write('{},{}\n'.format(rgb_values, product_code))
+
+        response = self._table.put_item(
+            Item={
+                'rgb_values': rgb_values,
+                'product_code': product_code
+            }
+        )
+
+        return response
 
     def get_product_for_rgb(self, rgb):
-        """
-        Get the product code for an inputted RGB tuple.
-        For now this is just from a flat CSV file.
-        """
+        """Get product codes for an inputted RGB tuple."""
 
         rgb_values = self._format_rgb_values(rgb)
-        with open('database.txt', 'r') as database:
-            lines = [line.rstrip('\n') for line in database.readlines()]
-            for line in lines:
-                if line.startswith(rgb_values):
-                    return line.split(',')[1]
+
+        try:
+            response = self._table.get_item(
+                Key={
+                    'rgb_values': rgb_values
+                }
+            )
+        except ClientError as e:
+            print(e.response['Error']['Message'])
+        else:
+            if 'Item' in response:
+                return response['Item']['product_code']
+
+    def get_all_rgb_values(self):
+        """Get all stored RGB values."""
+
+        rgb_values = []
+        response = self._table.scan()
+        for item in response['Items']:
+            rgb_values.append(item['rgb_values'])
+
+        return rgb_values
