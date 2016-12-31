@@ -13,15 +13,24 @@ class DataStorage(object):
                                         endpoint_url='http://localhost:8000')
         self._table = self._dynamodb.Table('ProductColours')
 
-    def _format_rgb_values(self, rgb_values):
+    def _convert_rgb_string_to_tuple(self, rgb_string):
+        """
+        Takes a string of RGB values and converts it into a tuple.
+        Example input: '086103001'
+        Example output: (86, 103, 1)
+        """
+
+        return tuple([int(rgb_string[0:3]), int(rgb_string[3:6]), int(rgb_string[6:9])])
+
+
+    def _convert_rgb_tuple_to_string(self, rgb_tuple):
         """
         Takes a tuple of RGB values and formats it into a string.
         Example input: (86, 103, 1)
         Example output: '086103001'
         """
 
-        for rgb_value in rgb_values:
-            return ''.join([self._zero_pad_number(v) for v in rgb_values])
+        return ''.join([self._zero_pad_number(v) for v in rgb_tuple])
 
     def _zero_pad_number(self, number, length=3):
         return str(number).zfill(length)
@@ -29,7 +38,7 @@ class DataStorage(object):
     def store_product_for_rgb(self, rgb, product_code):
         """Store the product code against the RGB values."""
 
-        rgb_values = self._format_rgb_values(rgb)
+        rgb_values = self._convert_rgb_tuple_to_string(rgb)
 
         response = self._table.put_item(
             Item={
@@ -43,7 +52,7 @@ class DataStorage(object):
     def get_product_for_rgb(self, rgb):
         """Get product codes for an inputted RGB tuple."""
 
-        rgb_values = self._format_rgb_values(rgb)
+        rgb_values = self._convert_rgb_tuple_to_string(rgb)
 
         try:
             response = self._table.get_item(
@@ -63,6 +72,6 @@ class DataStorage(object):
         rgb_values = []
         response = self._table.scan()
         for item in response['Items']:
-            rgb_values.append(item['rgb_values'])
+            rgb_values.append(self._convert_rgb_string_to_tuple(item['rgb_values']))
 
         return rgb_values
