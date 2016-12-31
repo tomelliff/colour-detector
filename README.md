@@ -17,3 +17,20 @@ pip install -r requirements.txt
 java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
 ```
 to start DynamoDB locally.
+
+#### Authenticate with Google Cloud (to use the Vision API)
+[Install Google Cloud SDK](https://cloud.google.com/sdk/docs/quickstart-linux)
+1. Download [64 bit](https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz) or [32 bit](https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86.tar.gz) tarball
+2. Extract to location of your choice
+3. Navigate to the extracted directory and run:
+```
+./google-cloud-sdk/install.sh
+```
+4. Initialise the SDK:
+```
+gcloud init
+```
+5. Authenticate:
+```
+gcloud beta auth application-default login
+```
