@@ -1,14 +1,34 @@
-import colour_detector
+#!/usr/bin/env python
 
-def test_convert_rgb_to_xyz():
-    mulberry_burst_rgb = {'red': 106, 'green': 82, 'blue': 96}
-    mulberry_burst_xyz = {'Y': 9.94328616129628, 'X': 11.072472016046184, 'Z': 12.401994360808763}
-    assert colour_detector.convert_rgb_to_xyz(mulberry_burst_rgb) == mulberry_burst_xyz
+import unittest
 
-def test_convert_xyz_to_cielab():
-    mulberry_burst_xyz = {'Y': 9.94328616129628, 'X': 11.072472016046184, 'Z': 12.401994360808763}
-    mulberry_burst_cielab = {'CIE-b*': -4.308149163408482, 'CIE-a*': 12.556231265920037, 'CIE-L*': 37.740450406310735}
-    assert colour_detector.convert_xyz_to_cielab(mulberry_burst_xyz) == mulberry_burst_cielab
+from colour_detector import ColourDetector
 
-test_convert_rgb_to_xyz()
-test_convert_xyz_to_cielab()
+class ColourDetectorTest(unittest.TestCase):
+    def setUp(self):
+        self.cd = ColourDetector()
+
+    def test_white(self):
+        white_b64 = 'iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgAgMAAAAAulYGAAAADFBMVEX' \
+                    '///8AAADc2c////83BRtzAAAA8klEQVR4nO3NMREAIAwEsDrAB8o51O' \
+                    'EAJjT80MRAaodUv3hVxOwYjxtwxGKxWCwWi8VisVgsFovFYrFYLBaLx' \
+                    'WKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLBaL' \
+                    'xWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLBa' \
+                    'LxWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLB' \
+                    'aLxWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYL' \
+                    'BaLxWLxjyuiY7xD+sUPl1d9uWzK18sAAAAASUVORK5CYII='
+        self.assertEqual(self.cd.get_rgb_values(white_b64), (255, 255, 255))
+
+    def test_black(self):
+        black_b64 = 'iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgAgMAAAAAulYGAAAADFBMVEX' \
+                    '///8AAADc2c8AAAA3uz1hAAAA8klEQVR4nO3NMREAIAwEsDrAB8o51O' \
+                    'EAJjT80MRAaodUv3hVxOwYjxtwxGKxWCwWi8VisVgsFovFYrFYLBaLx' \
+                    'WKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLBaL' \
+                    'xWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLBa' \
+                    'LxWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLB' \
+                    'aLxWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYL' \
+                    'BaLxWLxjyuiY7xD+sUPl1d9uWzK18sAAAAASUVORK5CYII='
+        self.assertEqual(self.cd.get_rgb_values(black_b64), (0, 0, 0))
+
+if __name__ == '__main__':
+    unittest.main()

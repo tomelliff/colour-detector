@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-
-import argparse
-
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -35,17 +31,11 @@ class ColourDetector(object):
 
         response = service_request.execute()
         rgb_values = response['responses'][0]['imagePropertiesAnnotation']['dominantColors']['colors'][0]['color']
-        red = rgb_values['red']
-        green = rgb_values['green']
-        blue = rgb_values['blue']
-        return (red, green, blue)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('image_file', help='The image you\'d like to get the colour for.')
-    args = parser.parse_args()
-
-    cd = ColourDetector()
-    rgb_values = cd.get_rgb_values(args.image_file)
-    print(rgb_values)
+        # Black returns an empty color dictionary (and 'undefined's for the rgb value response)
+        if rgb_values:
+            red = rgb_values['red']
+            green = rgb_values['green']
+            blue = rgb_values['blue']
+            return (red, green, blue)
+        else:
+            return (0, 0, 0)
