@@ -31,11 +31,9 @@ class ColourDetector(object):
 
         response = service_request.execute()
         rgb_values = response['responses'][0]['imagePropertiesAnnotation']['dominantColors']['colors'][0]['color']
-        # Black returns an empty color dictionary (and 'undefined's for the rgb value response)
-        if rgb_values:
-            red = rgb_values['red']
-            green = rgb_values['green']
-            blue = rgb_values['blue']
-            return (red, green, blue)
-        else:
-            return (0, 0, 0)
+        # If an RGB value is not present then the Google Vision API doesn't return a key in the color object
+        # The rgb key also returns undefined strings
+        red = rgb_values.get('red', 0)
+        green = rgb_values.get('green', 0)
+        blue = rgb_values.get('blue', 0)
+        return (red, green, blue)
