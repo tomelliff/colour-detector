@@ -1,3 +1,5 @@
+import os
+
 import boto3
 
 from botocore.exceptions import ClientError
@@ -8,10 +10,23 @@ class DataStorage(object):
     given RGB values.
     """
 
-    def __init__(self):
-        self._dynamodb = boto3.resource('dynamodb', region_name='eu-west-1',
-                                        endpoint_url='http://localhost:8000')
-        self._table = self._dynamodb.Table('ProductColours')
+    def __init__(self, local=False, region=None, table_name='ProductColours'):
+        if local:
+            self._dynamodb = boto3.resource(
+                            'dynamodb',
+                            aws_secret_access_key='dummyKey',
+                            aws_access_key_id='dummyKey',
+                            region_name='us-east-1',
+                            endpoint_url='http://localhost:8000')
+        else:
+            region = os.environ.get('AWS_DEFAULT_REGION', region)
+            if region is None:
+                raise ValueError('You must specify either local or a region')
+            self._dynamodb = boto3.resource(
+                                            'dynamodb',
+                                            region_name=region,
+                                            endpoint_url='https://dynamodb.{}.amazonaws.com'.format(region))
+        self._table = self._dynamodb.Table(table_name)
 
     def _convert_rgb_string_to_tuple(self, rgb_string):
         """
