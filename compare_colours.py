@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+from operator import itemgetter
 
 import colour_comparison
 import colour_detector
@@ -22,8 +23,9 @@ def main(image_file, local, region):
         print(product)
         delta = cc.compare_colours(rgb, product)
         print(delta)
-        results.append({round(delta, 3): rgb})
+        results.append({'delta': round(delta, 3), 'rgb_values': rgb})
 
+    results = sorted(results, key=itemgetter('delta'))
     print(results)
 
 
