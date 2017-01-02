@@ -24,7 +24,7 @@ def _compare_colours(uploaded_rgb, product_rgb):
     delta = cc.compare_colours(uploaded_rgb, product_rgb)
     return delta
 
-def find_product(local, region, table_name, image_content):
+def find_product(image_content, local=None, region=None, table_name=None):
     image_rgb_values = _get_image_rgb_values(image_content)
     all_products = _get_all_stored_rgb_values(local, region, table_name)
 
@@ -50,4 +50,4 @@ def find_product(local, region, table_name, image_content):
 #             'LxWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLB' \
 #             'aLxWKxWCwWi8VisVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYL' \
 #             'BaLxWLxjyuiY7xD+sUPl1d9uWzK18sAAAAASUVORK5CYII='
-# print(find_product(True, 'eu-west-1', 'ProductColours', base64_image))
+# print(find_product(table_name='ProductColours', image_content=base64_image))
