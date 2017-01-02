@@ -1,3 +1,9 @@
+import os
+import sys
+
+here = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(here, "../vendored"))
+
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000

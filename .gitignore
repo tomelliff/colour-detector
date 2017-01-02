@@ -1,5 +1,6 @@
-# Virtualenv
+# Virtualenv and packages
 env/
+vendored/
 
 # Compiled binaries
 *.pyc

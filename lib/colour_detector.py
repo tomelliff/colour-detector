@@ -1,4 +1,8 @@
 import os
+import sys
+
+here = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(here, "../vendored"))
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -18,7 +22,7 @@ class ColourDetector(object):
 
         here = os.path.dirname(os.path.realpath(__file__))
 
-        credentials_path = os.path.join(here, "google-application-credentials.json")
+        credentials_path = os.path.join(here, "../google-application-credentials.json")
         if os.path.isfile(credentials_path) and os.path.getsize(credentials_path) > 0:
             os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
