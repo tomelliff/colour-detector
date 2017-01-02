@@ -1,2 +1,8 @@
+# Virtualenv
 env/
+
+# Compiled binaries
 *.pyc
+
+# Credentials
+google-application-credentials.json

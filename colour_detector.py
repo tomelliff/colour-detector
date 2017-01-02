@@ -1,3 +1,5 @@
+import os
+
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -13,6 +15,12 @@ class ColourDetector(object):
         image_content is a base64 encoded image file.
         Returns a tuple of RGB values.
         """
+
+        here = os.path.dirname(os.path.realpath(__file__))
+
+        credentials_path = os.path.join(here, "google-application-credentials.json")
+        if os.path.isfile(credentials_path) and os.path.getsize(credentials_path) > 0:
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
 
         credentials = GoogleCredentials.get_application_default()
         service = discovery.build('vision', 'v1', credentials=credentials)
