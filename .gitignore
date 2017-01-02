@@ -5,5 +5,8 @@ vendored/
 # Compiled binaries
 *.pyc
 
+# Serverless stuff
+.serverless/
+
 # Credentials
 google-application-credentials.json
