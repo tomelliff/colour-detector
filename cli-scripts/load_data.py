@@ -4,7 +4,10 @@ Command line script for taking an image and its associated product code
 and uploading to the database.
 '''
 import argparse
+import os
+import sys
 
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../lib/"))
 import colour_detector
 import data_storage
 from process_image import process_image

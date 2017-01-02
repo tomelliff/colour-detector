@@ -4,7 +4,10 @@ Command line script for retrieving a product code for an exact match of the
 dominant colours in the image.
 '''
 import argparse
+import os
+import sys
 
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../lib/"))
 import colour_detector
 import data_storage
 from process_image import process_image
